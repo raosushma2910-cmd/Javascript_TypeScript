@@ -1,3 +1,5 @@
-# JavaScript and TypeScript
+# JavaScript and TypeScript Learning Repository
 
-A collection of JavaScript and TypeScript code and projects for learning and experimentation.
+This repository contains small examples for learning JavaScript and TypeScript. The
+`Js_basic` folder starts with `helloworld.js`, a first program that prints a message
+to the console.
