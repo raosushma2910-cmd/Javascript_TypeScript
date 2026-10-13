@@ -12,6 +12,8 @@ The `chapter1_Js_basic` folder contains introductory JavaScript examples:
   execution and variable declarations.
 - `chapter2_keyword_identifier` covers keywords, identifier rules, comments, and
   interview questions.
+- `chapter2_keyword_identifier/chapter03_literals` introduces JavaScript literals
+  and the difference between `null` and `undefined`.
 
 Run an example with [Node.js](https://nodejs.org/):
 
