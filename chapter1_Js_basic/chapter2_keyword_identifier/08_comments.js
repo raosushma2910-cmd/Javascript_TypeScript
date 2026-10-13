@@ -1,0 +1,1 @@
+//var v= 10; this will not be executed because it is commented out
