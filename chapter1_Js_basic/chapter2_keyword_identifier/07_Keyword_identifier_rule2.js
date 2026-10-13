@@ -17,3 +17,11 @@ var last_name = "Rao";
 //4. screaming snake case
 var LAST_NAME = "Rao";
 
+var sushma_rao ="Hello";
+console.log(sushma_rao);
+
+var sushma$rao ="Hello";
+console.log(sushma$rao);
+
+var sushma1236 ="Hello";
+console.log(sushma1236);

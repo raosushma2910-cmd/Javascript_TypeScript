@@ -10,8 +10,11 @@ The `chapter1_Js_basic` folder contains introductory JavaScript examples:
 - `01_helloworld.js` and `02_math.js` introduce basic statements and arithmetic.
 - `03_js_engine.js` and `04_let_engine.js` contain examples related to JavaScript
   execution and variable declarations.
-- `chapter2_keyword_identifier` covers keywords, identifier rules, comments, and
-  interview questions.
+- `chapter2_keyword_identifier` covers keywords, identifier naming conventions,
+  comments, and interview questions. The identifier examples show valid names
+  using letters, numbers, underscores, and `$`, along with invalid names that
+  contain spaces or hyphens, use special characters, start with a number, or
+  conflict with a keyword.
 - `chapter2_keyword_identifier/chapter03_literals` introduces JavaScript literals
   and the difference between `null` and `undefined`.
 
