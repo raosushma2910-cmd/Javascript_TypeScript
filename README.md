@@ -17,6 +17,10 @@ The `chapter1_Js_basic` folder contains introductory JavaScript examples:
   conflict with a keyword.
 - `chapter2_keyword_identifier/chapter03_literals` introduces JavaScript literals
   and the difference between `null` and `undefined`.
+- `chapter2_keyword_identifier/chapter03_literals/chapter_04_operator/chapter_05_increment_decrement_operator`
+  contains operator examples, including `45_nullish_operator.js`, which
+  demonstrates the nullish coalescing operator (`??`). It uses the fallback only
+  when the left-hand value is `null` or `undefined`.
 
 Run an example with [Node.js](https://nodejs.org/):
 
