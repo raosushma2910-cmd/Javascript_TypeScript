@@ -1,0 +1,20 @@
+{
+  "name": "sushma",
+  "version": "1.0.0",
+  "description": "This repository contains small, runnable examples for learning JavaScript and\r TypeScript.",
+  "homepage": "https://github.com/raosushma2910-cmd/Javascript_TypeScript#readme",
+  "bugs": {
+    "url": "https://github.com/raosushma2910-cmd/Javascript_TypeScript/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raosushma2910-cmd/Javascript_TypeScript.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
