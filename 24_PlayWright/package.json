@@ -1,0 +1,12 @@
+{
+  "name": "playwright-learning",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.0",
+    "typescript": "^7.0.2"
+  }
+}

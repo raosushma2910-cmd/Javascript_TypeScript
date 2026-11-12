@@ -1,36 +1,28 @@
-function placeOrder(item, callback){
-    console.log("Placing an order");
-    console.log("Order Placed", item);
-    callback();
+function placeOrder(item, callback) {
+    console.log("Placing an order...");
+    console.log("Order placed:", item);
+
+    if (typeof callback === "function") {
+        callback();
+        return;
+    }
+
+    console.log("No callback provided.");
 }
 
+// First way - named function
+function completeOrderPrint() {
+    console.log("Normal function callback");
+}
 
-// // First Way
-// function CompleteOrderPrint(){
-//     console.log("Normal Fn");
-// }
+placeOrder("Burger", completeOrderPrint);
 
-// placeOrder("Burger", CompleteOrderPrint);
+// Second way - anonymous function
+placeOrder("Burger", function () {
+    console.log("Order is ready! Pick it up.");
+});
 
-
-
-// // Sencond Way Anoy
-// placeOrder("Burger", function(){
-//     console.log("Order is ready!, pick it up!");
-// });
-
-
-// Third Way - Arrow Fn
+// Third way - arrow function
 placeOrder("Burger", () => {
-    console.log("Arrow Fn, I am also a function wihtout name!")
+    console.log("Arrow function callback: I am also a function without a name!");
 });
-
-test('has title', async ({ page }) => {
-
-});
-
-
-// test('has title', async ({ page }) => {
-//   await page.goto('https://playwright.dev/');
-//   await expect(page).toHaveTitle(/Playwright/);
-// });
