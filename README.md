@@ -11,3 +11,8 @@ node 01_Chapter_Js_basic/01_helloworld.js
 ```
 
 Replace the example path with any `.js` file in the repository.
+
+## Learning notes
+
+- [TypeScript: `any` vs `unknown`](Learning/any-vs-unknown.md) compares their type-safety behavior in a table.
+- In VS Code, press `Ctrl+Shift+V` to see a rendered Markdown preview, or `Ctrl+K V` to open it to the side.
