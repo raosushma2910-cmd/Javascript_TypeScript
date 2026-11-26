@@ -1,0 +1,930 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JavaScript, TypeScript &amp; Playwright - Revision Notes</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 13mm 13mm 16mm;
+    }
+
+    :root {
+      color-scheme: light;
+      --ink: #17324d;
+      --muted: #566a7e;
+      --navy: #17324d;
+      --teal: #39a994;
+      --coral: #e8795b;
+      --yellow: #f3bb4d;
+      --purple: #8062a8;
+      --pale-blue: #eef5fb;
+      --pale-teal: #e8f6f1;
+      --pale-coral: #fff0e9;
+      --pale-yellow: #fff7df;
+      --pale-purple: #f2eef9;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: #e8eef4;
+      font: 10pt/1.45 "Segoe UI", Arial, sans-serif;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    h1, h2, h3, p {
+      margin-top: 0;
+    }
+
+    h1, h2, h3 {
+      line-height: 1.15;
+    }
+
+    a {
+      color: #155e75;
+      text-decoration: none;
+    }
+
+    .page {
+      width: 100%;
+    }
+
+    .cover {
+      min-height: 265mm;
+      padding: 18mm 15mm;
+      color: #fff;
+      background:
+        radial-gradient(circle at 88% 15%, rgba(243, 187, 77, .92) 0 11mm, transparent 11.2mm),
+        radial-gradient(circle at 12% 89%, rgba(57, 169, 148, .9) 0 20mm, transparent 20.2mm),
+        linear-gradient(145deg, #17324d 0%, #235572 58%, #347e85 100%);
+      border-radius: 7mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      break-after: page;
+    }
+
+    .cover .eyebrow {
+      display: inline-block;
+      padding: 2mm 4mm;
+      color: #17324d;
+      background: #f3bb4d;
+      border-radius: 20px;
+      font-size: 9pt;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .cover h1 {
+      max-width: 150mm;
+      margin: 13mm 0 5mm;
+      font-size: 31pt;
+      letter-spacing: -.03em;
+    }
+
+    .cover .subtitle {
+      max-width: 130mm;
+      color: #e6f1f5;
+      font-size: 14pt;
+    }
+
+    .cover-art {
+      width: 100%;
+      max-height: 72mm;
+      margin: 8mm 0;
+    }
+
+    .cover-note {
+      padding: 5mm;
+      color: #17324d;
+      background: rgba(255, 255, 255, .94);
+      border-radius: 4mm;
+      font-size: 10pt;
+    }
+
+    .cover-note strong {
+      color: #155e75;
+    }
+
+    .toc {
+      break-after: page;
+    }
+
+    .page-title {
+      margin: 0 0 3mm;
+      color: var(--navy);
+      font-size: 22pt;
+    }
+
+    .page-intro {
+      margin-bottom: 6mm;
+      color: var(--muted);
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2mm 5mm;
+    }
+
+    .toc-link {
+      display: block;
+      padding: 2.2mm 3mm;
+      background: #fff;
+      border-left: 1.2mm solid var(--teal);
+      border-radius: 2mm;
+      font-size: 9pt;
+      font-weight: 600;
+    }
+
+    .toc-link:nth-child(4n + 2) {
+      border-left-color: var(--coral);
+    }
+
+    .toc-link:nth-child(4n + 3) {
+      border-left-color: var(--yellow);
+    }
+
+    .toc-link:nth-child(4n) {
+      border-left-color: var(--purple);
+    }
+
+    .cluster {
+      break-before: page;
+    }
+
+    .cluster-heading {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 6mm;
+      margin-bottom: 4mm;
+      padding-bottom: 3mm;
+      border-bottom: 1.2mm solid var(--teal);
+    }
+
+    .cluster:nth-of-type(4n + 1) .cluster-heading {
+      border-color: var(--coral);
+    }
+
+    .cluster:nth-of-type(4n + 2) .cluster-heading {
+      border-color: var(--yellow);
+    }
+
+    .cluster:nth-of-type(4n + 3) .cluster-heading {
+      border-color: var(--purple);
+    }
+
+    .cluster-heading h1 {
+      margin: 0;
+      font-size: 19pt;
+    }
+
+    .cluster-heading p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 9pt;
+      text-align: right;
+    }
+
+    .chapter {
+      margin: 0 0 3mm;
+      padding: 3.2mm 4mm;
+      background: #fff;
+      border: .3mm solid #dce5ed;
+      border-radius: 3mm;
+      break-inside: avoid;
+    }
+
+    .chapter-head {
+      display: flex;
+      align-items: center;
+      gap: 2.5mm;
+      margin-bottom: 1.5mm;
+    }
+
+    .chapter-head h2 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 12pt;
+    }
+
+    .badge {
+      display: inline-grid;
+      width: 8mm;
+      height: 8mm;
+      place-items: center;
+      flex: 0 0 8mm;
+      color: #fff;
+      background: var(--teal);
+      border-radius: 50%;
+      font-size: 8pt;
+      font-weight: 800;
+    }
+
+    .chapter:nth-of-type(4n + 2) .badge {
+      background: var(--coral);
+    }
+
+    .chapter:nth-of-type(4n + 3) .badge {
+      color: var(--navy);
+      background: var(--yellow);
+    }
+
+    .chapter:nth-of-type(4n) .badge {
+      background: var(--purple);
+    }
+
+    .chapter p {
+      margin: 1mm 0 2mm;
+    }
+
+    .chapter ul {
+      margin: 1mm 0 1mm;
+      padding-left: 5mm;
+    }
+
+    .chapter li {
+      margin: .6mm 0;
+    }
+
+    .tip {
+      margin-top: 2mm;
+      padding: 2mm 3mm;
+      background: var(--pale-yellow);
+      border-left: 1mm solid var(--yellow);
+      border-radius: 1.5mm;
+    }
+
+    .tip strong {
+      color: #77530b;
+    }
+
+    .code {
+      overflow-wrap: anywhere;
+      margin: 2mm 0 0;
+      padding: 2.5mm 3mm;
+      color: #eff7fb;
+      background: #20394f;
+      border-radius: 2mm;
+      font: 8.3pt/1.35 Consolas, "Courier New", monospace;
+      white-space: pre-wrap;
+    }
+
+    .diagram {
+      margin: 2mm 0 0;
+      padding: 2mm;
+      background: var(--pale-blue);
+      border-radius: 2mm;
+      break-inside: avoid;
+    }
+
+    .diagram svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .diagram text {
+      fill: #17324d;
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .diagram .small {
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .compare {
+      width: 100%;
+      margin: 2mm 0;
+      border-collapse: collapse;
+      font-size: 8.8pt;
+    }
+
+    .compare th,
+    .compare td {
+      padding: 1.7mm 2mm;
+      border: .3mm solid #d9e3eb;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .compare th {
+      color: #fff;
+      background: #285d78;
+    }
+
+    .compare tr:nth-child(even) td {
+      background: #f1f6fa;
+    }
+
+    .remember-box {
+      margin-top: 3mm;
+      padding: 3mm 4mm;
+      background: var(--pale-teal);
+      border: .4mm solid #b5dfd1;
+      border-radius: 2mm;
+    }
+
+    .remember-box h3 {
+      margin: 0 0 1mm;
+      color: #1d7665;
+      font-size: 10pt;
+    }
+
+    .small-note {
+      color: var(--muted);
+      font-size: 8.5pt;
+    }
+
+    @media screen {
+      body {
+        padding: 12mm;
+      }
+
+      .page {
+        max-width: 184mm;
+        margin: 0 auto 12mm;
+      }
+
+      .cover {
+        box-shadow: 0 5px 25px rgba(23, 50, 77, .2);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="cover">
+      <div>
+        <span class="eyebrow">Learning folder | Quick revision</span>
+        <h1>JavaScript, TypeScript &amp; Playwright</h1>
+        <p class="subtitle">A visual, chapter-by-chapter memory guide for the lab exercises.</p>
+      </div>
+      <svg class="cover-art" viewBox="0 0 760 260" role="img" aria-label="Three connected learning cards: JavaScript, TypeScript, Playwright">
+        <path d="M142 128 H615" stroke="#d7edf0" stroke-width="8" stroke-linecap="round"/>
+        <path d="M295 128 l-18 -14 v28z M467 128 l-18 -14 v28z" fill="#f3bb4d"/>
+        <rect x="20" y="58" width="205" height="140" rx="22" fill="#f3bb4d"/>
+        <rect x="278" y="58" width="205" height="140" rx="22" fill="#67c9b0"/>
+        <rect x="535" y="58" width="205" height="140" rx="22" fill="#f39a7c"/>
+        <text x="122" y="112" text-anchor="middle" fill="#17324d" font-size="25" font-weight="800" font-family="Segoe UI, Arial">JavaScript</text>
+        <text x="122" y="147" text-anchor="middle" fill="#17324d" font-size="15" font-family="Segoe UI, Arial">values &amp; behavior</text>
+        <text x="380" y="112" text-anchor="middle" fill="#17324d" font-size="25" font-weight="800" font-family="Segoe UI, Arial">TypeScript</text>
+        <text x="380" y="147" text-anchor="middle" fill="#17324d" font-size="15" font-family="Segoe UI, Arial">types &amp; checks</text>
+        <text x="637" y="112" text-anchor="middle" fill="#17324d" font-size="25" font-weight="800" font-family="Segoe UI, Arial">Playwright</text>
+        <text x="637" y="147" text-anchor="middle" fill="#17324d" font-size="15" font-family="Segoe UI, Arial">browser tests</text>
+      </svg>
+      <div class="cover-note">
+        <strong>How to use these notes:</strong> read the bold rule, trace the diagram, then type the short example from memory. Examples are concise reminders; check the original lab when you need the full exercise.
+      </div>
+    </section>
+
+    <section class="toc">
+      <h1 class="page-title">Chapter map</h1>
+      <p class="page-intro">Jump to a chapter group. The chapter numbers follow the repository folders.</p>
+      <div class="toc-grid">
+        <a class="toc-link" href="#foundations">01-05 | JavaScript foundations</a>
+        <a class="toc-link" href="#decisions">06-08 | Decisions and input</a>
+        <a class="toc-link" href="#loops-arrays">09-12 | Loops and arrays</a>
+        <a class="toc-link" href="#functions">13-16 | Functions and language mechanics</a>
+        <a class="toc-link" href="#data-async">17-20 | Objects, callbacks and promises</a>
+        <a class="toc-link" href="#async-tools">21-24 | Async, modules and Playwright</a>
+        <a class="toc-link" href="#oop">25-28 | Classes and object-oriented programming</a>
+        <a class="toc-link" href="#interview-types">29-31 | Interview practice and TypeScript</a>
+      </div>
+      <div class="remember-box">
+        <h3>A reliable problem-solving loop</h3>
+        <p>Read the input and expected output; choose the smallest suitable construct; trace one example by hand; run the file; then test a boundary case.</p>
+      </div>
+      <div class="diagram">
+        <svg viewBox="0 0 760 128" role="img" aria-label="Read, choose, trace, run, and check">
+          <rect x="8" y="28" width="130" height="64" rx="14" fill="#d8eaf5"/>
+          <rect x="163" y="28" width="130" height="64" rx="14" fill="#d9f0e9"/>
+          <rect x="318" y="28" width="130" height="64" rx="14" fill="#fff0cf"/>
+          <rect x="473" y="28" width="130" height="64" rx="14" fill="#f8ddd4"/>
+          <rect x="628" y="28" width="124" height="64" rx="14" fill="#e7def3"/>
+          <path d="M139 60h22m132 0h22m132 0h22m132 0h22" stroke="#45677e" stroke-width="3"/>
+          <path d="m156 60-8-6v12z m132 0-8-6v12z m132 0-8-6v12z m132 0-8-6v12z" fill="#45677e"/>
+          <text x="73" y="67" text-anchor="middle">Read</text>
+          <text x="228" y="67" text-anchor="middle">Choose</text>
+          <text x="383" y="67" text-anchor="middle">Trace</text>
+          <text x="538" y="67" text-anchor="middle">Run</text>
+          <text x="690" y="67" text-anchor="middle">Check</text>
+        </svg>
+      </div>
+    </section>
+
+    <section class="cluster" id="foundations">
+      <header class="cluster-heading">
+        <div><h1>JavaScript foundations</h1></div>
+        <p>Chapters 01-05<br>Syntax, values and operators</p>
+      </header>
+
+      <article class="chapter" id="ch01">
+        <div class="chapter-head"><span class="badge">01</span><h2>JavaScript basics</h2></div>
+        <p>JavaScript source is parsed and executed by a runtime such as Node.js or a browser. Start with a statement, then inspect its output.</p>
+        <pre class="code">console.log("Hello, world!");
+const total = 2 + 3;
+console.log(total);</pre>
+        <div class="tip"><strong>Remember:</strong> Node runs a JavaScript file with <code>node path/to/file.js</code>.</div>
+      </article>
+
+      <article class="chapter" id="ch02">
+        <div class="chapter-head"><span class="badge">02</span><h2>Keywords and identifiers</h2></div>
+        <p>Keywords have a language-defined role; identifiers are names you choose for variables and functions. Names are case-sensitive and cannot be reserved words.</p>
+        <pre class="code">const userName = "Sam";
+function showStatus() { return "ready"; }</pre>
+        <div class="tip"><strong>Remember:</strong> choose descriptive names; use a consistent naming style.</div>
+      </article>
+
+      <article class="chapter" id="ch03">
+        <div class="chapter-head"><span class="badge">03</span><h2>Literals and primitive values</h2></div>
+        <p>A literal writes a value directly in code. Keep <code>null</code> (intentional empty value) distinct from <code>undefined</code> (missing or not assigned).</p>
+        <table class="compare">
+          <tr><th>Kind</th><th>Example</th><th>Quick note</th></tr>
+          <tr><td>Number</td><td><code>42</code>, <code>3.14</code></td><td>Also includes <code>NaN</code> and infinities.</td></tr>
+          <tr><td>Text</td><td><code>"hello"</code>, <code>`Hi ${name}`</code></td><td>Backticks interpolate expressions.</td></tr>
+          <tr><td>Other primitives</td><td><code>true</code>, <code>null</code>, <code>undefined</code></td><td>Each has different meaning.</td></tr>
+        </table>
+      </article>
+
+      <article class="chapter" id="ch04">
+        <div class="chapter-head"><span class="badge">04</span><h2>Operators</h2></div>
+        <p>Operators combine values: arithmetic (<code>+ - * / %</code>), assignment (<code>=</code>), comparison, logical (<code>&amp;&amp; || !</code>) and conditional (<code>? :</code>).</p>
+        <pre class="code">const isReady = status === "pass" &amp;&amp; retries &lt; 3;
+const label = isReady ? "Run" : "Wait";</pre>
+        <div class="tip"><strong>Remember:</strong> prefer <code>===</code> and <code>!==</code> to avoid implicit type conversion surprises.</div>
+      </article>
+
+      <article class="chapter" id="ch05">
+        <div class="chapter-head"><span class="badge">05</span><h2>Increment, decrement and nullish coalescing</h2></div>
+        <p><code>++x</code> changes then yields the value; <code>x++</code> yields the old value then changes. <code>??</code> supplies a fallback only for <code>null</code> or <code>undefined</code>.</p>
+        <pre class="code">let count = 4;
+const oldCount = count++;
+const shownName = name ?? "Guest";</pre>
+        <div class="tip"><strong>Remember:</strong> <code>??</code> preserves valid falsy values such as <code>0</code> and <code>""</code>; <code>||</code> does not.</div>
+      </article>
+    </section>
+
+    <section class="cluster" id="decisions">
+      <header class="cluster-heading">
+        <div><h1>Decisions and input</h1></div>
+        <p>Chapters 06-08<br>Choose a path and read values</p>
+      </header>
+
+      <article class="chapter" id="ch06">
+        <div class="chapter-head"><span class="badge">06</span><h2>Conditional statements</h2></div>
+        <p>Use <code>if / else if / else</code> when conditions need different blocks. Use a ternary for one short value choice, not a long sequence of actions.</p>
+        <pre class="code">const result = score &gt;= 70 ? "Pass" : "Retry";
+if (score &gt;= 70) {
+  console.log("Pass");
+} else {
+  console.log("Retry");
+}</pre>
+      </article>
+
+      <article class="chapter" id="ch07">
+        <div class="chapter-head"><span class="badge">07</span><h2><code>switch</code> statements</h2></div>
+        <p>Use <code>switch</code> to compare one expression with several case values. Add <code>break</code> when a case should stop rather than fall through.</p>
+        <pre class="code">switch (responseCode) {
+  case 200: message = "OK"; break;
+  case 404: message = "Not found"; break;
+  default:  message = "Other status";
+}</pre>
+        <div class="tip"><strong>Remember:</strong> include a <code>default</code> for values that do not match a case.</div>
+      </article>
+
+      <article class="chapter" id="ch08">
+        <div class="chapter-head"><span class="badge">08</span><h2>User input in the browser and Node.js</h2></div>
+        <p>Input usually arrives as text. Convert it before numeric work and validate it before using it. Node examples use standard input modules such as <code>readline</code> or <code>fs</code>.</p>
+        <pre class="code">const number = Number(input);
+if (Number.isFinite(number)) {
+  console.log(number % 2 === 0 ? "Even" : "Odd");
+}</pre>
+        <div class="tip"><strong>Remember:</strong> <code>Number("abc")</code> is <code>NaN</code>; check input rather than assuming it is valid.</div>
+      </article>
+
+      <div class="diagram">
+        <svg viewBox="0 0 760 150" role="img" aria-label="A condition branches to true and false outcomes">
+          <path d="M380 16 465 62 380 108 295 62z" fill="#fff0cf" stroke="#d29a29" stroke-width="2"/>
+          <rect x="40" y="45" width="150" height="50" rx="12" fill="#d9f0e9"/>
+          <rect x="570" y="45" width="150" height="50" rx="12" fill="#f8ddd4"/>
+          <path d="M295 62H190 M465 62h105" stroke="#45677e" stroke-width="3"/>
+          <path d="m196 62-10-7v14z m368 0-10-7v14z" fill="#45677e"/>
+          <text x="380" y="66" text-anchor="middle">condition?</text>
+          <text x="115" y="75" text-anchor="middle">true branch</text>
+          <text x="645" y="75" text-anchor="middle">false branch</text>
+          <text x="230" y="49" class="small">yes</text>
+          <text x="508" y="49" class="small">no</text>
+        </svg>
+      </div>
+    </section>
+
+    <section class="cluster" id="loops-arrays">
+      <header class="cluster-heading">
+        <div><h1>Loops and arrays</h1></div>
+        <p>Chapters 09-12<br>Repeat work and handle lists</p>
+      </header>
+
+      <article class="chapter" id="ch09">
+        <div class="chapter-head"><span class="badge">09</span><h2><code>for</code> loops</h2></div>
+        <p>A <code>for</code> loop keeps setup, continuation condition and update together. Check the boundary (<code>&lt;</code> versus <code>&lt;=</code>) to avoid an extra or missing iteration.</p>
+        <pre class="code">for (let i = 0; i &lt; items.length; i++) {
+  console.log(items[i]);
+}</pre>
+      </article>
+
+      <article class="chapter" id="ch10">
+        <div class="chapter-head"><span class="badge">10</span><h2><code>while</code> loops</h2></div>
+        <p>A <code>while</code> loop checks before each pass. It may run zero times; update the state so the condition can eventually become false.</p>
+        <pre class="code">let age = 7;
+while (age &lt;= 10) {
+  console.log(age);
+  age++;
+}</pre>
+      </article>
+
+      <article class="chapter" id="ch11">
+        <div class="chapter-head"><span class="badge">11</span><h2><code>do...while</code> and nested loops</h2></div>
+        <p><code>do...while</code> checks after the body, so it runs at least once. Nested loops are useful for grids, matrices and patterns; the inner loop completes for each outer pass.</p>
+        <pre class="code">let attempt = 0;
+do {
+  attempt++;
+} while (attempt &lt; 1);</pre>
+        <div class="tip"><strong>Remember:</strong> nested loops multiply the amount of work; trace both counters.</div>
+      </article>
+
+      <article class="chapter" id="ch12">
+        <div class="chapter-head"><span class="badge">12</span><h2>Arrays and array methods</h2></div>
+        <p>Arrays are ordered, zero-indexed lists. Use <code>push / pop</code> at the end, <code>find</code> for one match, <code>filter</code> for matches, and <code>map</code> to transform each item.</p>
+        <pre class="code">const scores = [45, 82, 91, 60];
+const passing = scores.filter(score =&gt; score &gt;= 70);
+const labels = scores.map(score =&gt; score &gt;= 70 ? "Pass" : "Retry");</pre>
+        <div class="tip"><strong>Remember:</strong> default <code>sort()</code> compares text-like values; numbers need <code>nums.sort((a, b) =&gt; a - b)</code>.</div>
+      </article>
+
+      <div class="diagram">
+        <svg viewBox="0 0 760 132" role="img" aria-label="Array data flows through map, filter and reduce">
+          <rect x="8" y="35" width="130" height="58" rx="14" fill="#d8eaf5"/>
+          <rect x="205" y="35" width="130" height="58" rx="14" fill="#d9f0e9"/>
+          <rect x="402" y="35" width="130" height="58" rx="14" fill="#fff0cf"/>
+          <rect x="599" y="35" width="150" height="58" rx="14" fill="#e7def3"/>
+          <path d="M138 64h67m130 0h67m130 0h67" stroke="#45677e" stroke-width="3"/>
+          <path d="m199 64-9-6v12z m197 0-9-6v12z m197 0-9-6v12z" fill="#45677e"/>
+          <text x="73" y="70" text-anchor="middle">array</text>
+          <text x="270" y="70" text-anchor="middle">map</text>
+          <text x="467" y="70" text-anchor="middle">filter</text>
+          <text x="674" y="70" text-anchor="middle">result</text>
+          <text x="380" y="119" text-anchor="middle" class="small">Each method returns a value; chain only when it stays readable.</text>
+        </svg>
+      </div>
+    </section>
+
+    <section class="cluster" id="functions">
+      <header class="cluster-heading">
+        <div><h1>Functions and language mechanics</h1></div>
+        <p>Chapters 13-16<br>Reuse behavior and understand scope</p>
+      </header>
+
+      <article class="chapter" id="ch13">
+        <div class="chapter-head"><span class="badge">13</span><h2>Functions</h2></div>
+        <p>A function packages behavior. Parameters receive inputs; <code>return</code> sends a result back. Function declarations, expressions and arrow functions are common forms.</p>
+        <pre class="code">function hasError(...codes) {
+  return codes.some(code =&gt; code &gt;= 400);
+}
+hasError(200, 404);</pre>
+        <div class="tip"><strong>Remember:</strong> rest (<code>...args</code>) collects arguments; spread (<code>...items</code>) expands an iterable.</div>
+      </article>
+
+      <article class="chapter" id="ch14">
+        <div class="chapter-head"><span class="badge">14</span><h2><code>var</code>, <code>let</code>, <code>const</code>, hoisting and TDZ</h2></div>
+        <table class="compare">
+          <tr><th>Declaration</th><th>Scope</th><th>Key reminder</th></tr>
+          <tr><td><code>var</code></td><td>Function</td><td>Can be redeclared; hoisted and initialized as <code>undefined</code>.</td></tr>
+          <tr><td><code>let</code></td><td>Block</td><td>Can be reassigned; unavailable in its temporal dead zone before declaration.</td></tr>
+          <tr><td><code>const</code></td><td>Block</td><td>Binding cannot be reassigned; object contents may still change.</td></tr>
+        </table>
+        <div class="tip"><strong>Remember:</strong> prefer <code>const</code>; use <code>let</code> when reassignment is needed; avoid <code>var</code> in new code.</div>
+      </article>
+
+      <article class="chapter" id="ch15">
+        <div class="chapter-head"><span class="badge">15</span><h2>Closures, references and copying</h2></div>
+        <p>A closure keeps access to its outer lexical variables after the outer function returns. Objects are reference values: assigning one variable to another does not clone the object.</p>
+        <pre class="code">function makeCounter() {
+  let count = 0;
+  return () =&gt; ++count;
+}
+const next = makeCounter();
+next(); // 1</pre>
+        <div class="tip"><strong>Remember:</strong> object spread makes a shallow copy; nested objects remain shared. <code>structuredClone</code> can make a deep copy of supported data.</div>
+      </article>
+
+      <article class="chapter" id="ch16">
+        <div class="chapter-head"><span class="badge">16</span><h2>Strings</h2></div>
+        <p>Strings are immutable text values. Template literals use backticks for interpolation and multiline strings. Search with methods such as <code>includes</code>, <code>startsWith</code> and <code>indexOf</code>.</p>
+        <pre class="code">const message = `Test completed in ${elapsed}ms`;
+const isStaging = url.includes("staging");</pre>
+        <div class="tip"><strong>Remember:</strong> a method that returns a new string does not change the original variable unless you assign the result.</div>
+      </article>
+
+      <div class="diagram">
+        <svg viewBox="0 0 760 145" role="img" aria-label="A closure continues to access variables from its outer function">
+          <rect x="20" y="24" width="275" height="96" rx="16" fill="#fff0cf" stroke="#d29a29" stroke-width="2"/>
+          <rect x="465" y="41" width="260" height="65" rx="16" fill="#d9f0e9" stroke="#39a994" stroke-width="2"/>
+          <text x="157" y="53" text-anchor="middle">outer function</text>
+          <text x="157" y="82" text-anchor="middle" class="small">private count = 0</text>
+          <text x="157" y="102" text-anchor="middle" class="small">returns inner function</text>
+          <text x="595" y="68" text-anchor="middle">inner function</text>
+          <text x="595" y="89" text-anchor="middle" class="small">reads / updates count</text>
+          <path d="M295 72h170" stroke="#45677e" stroke-width="3" stroke-dasharray="7 5"/>
+          <path d="m458 72-10-7v14z" fill="#45677e"/>
+          <text x="380" y="59" text-anchor="middle" class="small">keeps lexical access</text>
+        </svg>
+      </div>
+    </section>
+
+    <section class="cluster" id="data-async">
+      <header class="cluster-heading">
+        <div><h1>Objects, callbacks and promises</h1></div>
+        <p>Chapters 17-20<br>Model data and async results</p>
+      </header>
+
+      <article class="chapter" id="ch17">
+        <div class="chapter-head"><span class="badge">17</span><h2>Objects</h2></div>
+        <p>Objects group named properties and methods. Access with dot or bracket notation; bracket notation is useful for a key stored in a variable. Destructuring can unpack properties, and names are case-sensitive.</p>
+        <pre class="code">const test = { status: "pass", code: 200 };
+console.log(test.status);
+console.log(test["code"]);</pre>
+        <div class="tip"><strong>Remember:</strong> when copying nested objects, know whether the copy is shallow or deep.</div>
+      </article>
+
+      <article class="chapter" id="ch18">
+        <div class="chapter-head"><span class="badge">18</span><h2>Multidimensional arrays</h2></div>
+        <p>An array of arrays represents rows and columns. Use one index per dimension; nested loops can visit every cell or produce left, right and pyramid patterns.</p>
+        <pre class="code">const matrix = [["login", "pass"], ["cart", "fail"]];
+for (let row = 0; row &lt; matrix.length; row++) {
+  for (let col = 0; col &lt; matrix[row].length; col++) {
+    console.log(matrix[row][col]);
+  }
+}</pre>
+      </article>
+
+      <article class="chapter" id="ch19">
+        <div class="chapter-head"><span class="badge">19</span><h2>Callbacks</h2></div>
+        <p>A callback is a function passed to another function to run later or at a chosen point. Nested asynchronous callbacks can become hard to follow ("callback hell").</p>
+        <pre class="code">function placeOrder(item, callback) {
+  console.log("Placed:", item);
+  callback();
+}
+placeOrder("Burger", () =&gt; console.log("Ready"));</pre>
+        <div class="tip"><strong>Remember:</strong> asynchronous callbacks do not make surrounding code wait; order may differ from source order.</div>
+      </article>
+
+      <article class="chapter" id="ch20">
+        <div class="chapter-head"><span class="badge">20</span><h2>Promises</h2></div>
+        <p>A promise is pending, then fulfilled or rejected. Handle success with <code>.then</code>, failure with <code>.catch</code>, and cleanup with <code>.finally</code>.</p>
+        <table class="compare">
+          <tr><th>Method</th><th>Use</th></tr>
+          <tr><td><code>Promise.all</code></td><td>Wait for all to fulfill; rejects if one rejects.</td></tr>
+          <tr><td><code>Promise.allSettled</code></td><td>Get every fulfilled/rejected outcome.</td></tr>
+          <tr><td><code>Promise.race</code></td><td>Use the first promise to settle.</td></tr>
+        </table>
+        <pre class="code">fetchData()
+  .then(data =&gt; console.log(data))
+  .catch(error =&gt; console.error(error))
+  .finally(() =&gt; console.log("done"));</pre>
+      </article>
+
+      <div class="diagram">
+        <svg viewBox="0 0 760 128" role="img" aria-label="Promise moves from pending to fulfilled or rejected">
+          <rect x="30" y="37" width="180" height="56" rx="15" fill="#fff0cf"/>
+          <rect x="500" y="15" width="220" height="48" rx="15" fill="#d9f0e9"/>
+          <rect x="500" y="76" width="220" height="48" rx="15" fill="#f8ddd4"/>
+          <path d="M210 65H350L500 39 M350 65 500 100" fill="none" stroke="#45677e" stroke-width="3"/>
+          <path d="m494 39-10-7v14z m0 61-10-7v14z" fill="#45677e"/>
+          <text x="120" y="72" text-anchor="middle">pending</text>
+          <text x="610" y="45" text-anchor="middle">fulfilled: then</text>
+          <text x="610" y="106" text-anchor="middle">rejected: catch</text>
+        </svg>
+      </div>
+    </section>
+
+    <section class="cluster" id="async-tools">
+      <header class="cluster-heading">
+        <div><h1>Async, modules and Playwright</h1></div>
+        <p>Chapters 21-24<br>Coordinate work and test a browser</p>
+      </header>
+
+      <article class="chapter" id="ch21">
+        <div class="chapter-head"><span class="badge">21</span><h2>Async/await and execution order</h2></div>
+        <p><code>async</code> functions return promises. <code>await</code> pauses that function until a promise settles, without blocking the whole JavaScript runtime. Use <code>try/catch</code> for failures.</p>
+        <pre class="code">async function loadUser() {
+  try {
+    const user = await getUser();
+    return user;
+  } catch (error) {
+    console.error(error);
+  }
+}</pre>
+        <div class="tip"><strong>Remember:</strong> sequential awaits are easy to read; independent work can often run together with <code>Promise.all([...])</code>.</div>
+      </article>
+
+      <article class="chapter" id="ch22">
+        <div class="chapter-head"><span class="badge">22</span><h2>Import and export</h2></div>
+        <p>Modules split code into files. Export reusable values and import them where needed. Keep the module syntax and Node/project configuration consistent.</p>
+        <pre class="code">// utils.js
+export const BASE_URL = "https://api.example.com";
+
+// app.js
+import { BASE_URL } from "./utils.js";</pre>
+      </article>
+
+      <article class="chapter" id="ch23">
+        <div class="chapter-head"><span class="badge">23</span><h2>Classes and objects</h2></div>
+        <p>A class describes the data and behavior shared by its instances. Create an instance with <code>new</code>; class methods are written without the <code>function</code> keyword.</p>
+        <pre class="code">class Person {
+  eat() { return "eating"; }
+}
+const person = new Person();</pre>
+      </article>
+
+      <article class="chapter" id="ch24">
+        <div class="chapter-head"><span class="badge">24</span><h2>Playwright project setup</h2></div>
+        <p>The <code>24_PlayWright</code> folder contains the Playwright test package setup. The small spec examples are in chapter 21: a test receives a <code>page</code>, navigates, and asserts a result.</p>
+        <pre class="code">test("opens the page", async ({ page }) =&gt; {
+  await page.goto("https://playwright.dev/");
+  await expect(page).toHaveTitle(/Playwright/);
+});</pre>
+        <div class="tip"><strong>Remember:</strong> use <code>await</code> for browser actions and rely on Playwright's web-first assertions to wait for expected conditions.</div>
+      </article>
+
+      <div class="diagram">
+        <svg viewBox="0 0 760 132" role="img" aria-label="Playwright test flow from test to browser page to assertion">
+          <rect x="12" y="34" width="150" height="62" rx="14" fill="#d8eaf5"/>
+          <rect x="205" y="34" width="150" height="62" rx="14" fill="#d9f0e9"/>
+          <rect x="398" y="34" width="150" height="62" rx="14" fill="#fff0cf"/>
+          <rect x="591" y="34" width="155" height="62" rx="14" fill="#f8ddd4"/>
+          <path d="M162 65h43m150 0h43m150 0h43" stroke="#45677e" stroke-width="3"/>
+          <path d="m199 65-9-6v12z m193 0-9-6v12z m193 0-9-6v12z" fill="#45677e"/>
+          <text x="87" y="71" text-anchor="middle">test()</text>
+          <text x="280" y="71" text-anchor="middle">page</text>
+          <text x="473" y="71" text-anchor="middle">action</text>
+          <text x="668" y="71" text-anchor="middle">expect()</text>
+          <text x="380" y="119" text-anchor="middle" class="small">await each action; assert the observable outcome</text>
+        </svg>
+      </div>
+    </section>
+
+    <section class="cluster" id="oop">
+      <header class="cluster-heading">
+        <div><h1>Classes and object-oriented programming</h1></div>
+        <p>Chapters 25-28<br>Build objects with clear responsibilities</p>
+      </header>
+
+      <article class="chapter" id="ch25">
+        <div class="chapter-head"><span class="badge">25</span><h2>Constructors, visibility and static members</h2></div>
+        <p>The <code>constructor</code> initializes each new instance. Instance members belong to one object; <code>static</code> members belong to the class. JavaScript private fields use <code>#</code>.</p>
+        <pre class="code">class Credentials {
+  #apiKey;
+  constructor(user, key) {
+    this.user = user;
+    this.#apiKey = key;
+  }
+}</pre>
+        <div class="tip"><strong>Remember:</strong> keep sensitive/internal state private and expose only the operations the caller needs.</div>
+      </article>
+
+      <article class="chapter" id="ch26">
+        <div class="chapter-head"><span class="badge">26</span><h2>Encapsulation</h2></div>
+        <p>Encapsulation keeps an object's state behind a small public interface. Validate changes inside methods rather than letting callers mutate important state freely.</p>
+        <pre class="code">class BankAccount {
+  #balance = 0;
+  getBalance() { return this.#balance; }
+  deposit(amount) {
+    if (amount &gt; 0) this.#balance += amount;
+  }
+}</pre>
+      </article>
+
+      <article class="chapter" id="ch27">
+        <div class="chapter-head"><span class="badge">27</span><h2>Inheritance</h2></div>
+        <p>A subclass can reuse and specialize a base class with <code>extends</code>. Call <code>super</code> when the parent constructor or behavior is required. The exercises compare single, multilevel, hierarchical and hybrid relationships; JavaScript classes have one direct superclass, while mixins can compose extra behavior.</p>
+        <pre class="code">class Browser {
+  open() { return "open"; }
+}
+class ChromiumBrowser extends Browser {
+  open() { return super.open() + " Chromium"; }
+}</pre>
+      </article>
+
+      <article class="chapter" id="ch28">
+        <div class="chapter-head"><span class="badge">28</span><h2>Polymorphism</h2></div>
+        <p>Different objects can answer the same method call in their own way. Runtime method overriding lets code work with a common interface while behavior varies by actual object.</p>
+        <pre class="code">function run(browser) {
+  console.log(browser.open());
+}
+run(new ChromiumBrowser());</pre>
+        <div class="tip"><strong>Remember:</strong> prefer a clear shared contract over long type checks for each subclass.</div>
+      </article>
+
+      <div class="diagram">
+        <svg viewBox="0 0 760 174" role="img" aria-label="Base Browser class branches to Chromium and Firefox classes">
+          <rect x="272" y="8" width="216" height="55" rx="14" fill="#fff0cf" stroke="#d29a29" stroke-width="2"/>
+          <rect x="88" y="112" width="216" height="52" rx="14" fill="#d9f0e9" stroke="#39a994" stroke-width="2"/>
+          <rect x="456" y="112" width="216" height="52" rx="14" fill="#e7def3" stroke="#8062a8" stroke-width="2"/>
+          <path d="M380 63v24H196v25m184-25h184v25" fill="none" stroke="#45677e" stroke-width="3"/>
+          <path d="m196 107-7-10h14z m368 0-7-10h14z" fill="#45677e"/>
+          <text x="380" y="31" text-anchor="middle">Browser (base)</text>
+          <text x="380" y="50" text-anchor="middle" class="small">open(), close()</text>
+          <text x="196" y="135" text-anchor="middle">ChromiumBrowser</text>
+          <text x="564" y="135" text-anchor="middle">FirefoxBrowser</text>
+          <text x="196" y="153" text-anchor="middle" class="small">overrides open()</text>
+          <text x="564" y="153" text-anchor="middle" class="small">overrides open()</text>
+        </svg>
+      </div>
+    </section>
+
+    <section class="cluster" id="interview-types">
+      <header class="cluster-heading">
+        <div><h1>Interview practice and TypeScript</h1></div>
+        <p>Chapters 29-31<br>Explain your reasoning and make types visible</p>
+      </header>
+
+      <article class="chapter" id="ch29">
+        <div class="chapter-head"><span class="badge">29</span><h2>Interview-style questions</h2></div>
+        <p>Practice tracing output, boundaries and object behavior before coding. Explain the approach, complexity when relevant, and one edge case.</p>
+        <div class="remember-box">
+          <h3>Quick checklist</h3>
+          <ul>
+            <li>What are the input constraints and expected output?</li>
+            <li>What happens for an empty value, a boundary value or an unexpected type?</li>
+            <li>Can the logic be named, tested and explained clearly?</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="chapter" id="ch30">
+        <div class="chapter-head"><span class="badge">30</span><h2>Strict-mode JavaScript starter</h2></div>
+        <p>The sample in this folder is a small JavaScript starter using <code>"use strict"</code>. Strict mode helps surface some unsafe JavaScript behavior; the TypeScript examples follow in chapter 31.</p>
+        <pre class="code">"use strict";
+let testName = "Sushma";</pre>
+      </article>
+
+      <article class="chapter" id="ch31">
+        <div class="chapter-head"><span class="badge">31</span><h2>TypeScript basics, functions and special types</h2></div>
+        <p>TypeScript adds static checks to JavaScript. Annotations describe expected values; they help catch mistakes before runtime and are erased from emitted JavaScript.</p>
+        <pre class="code">function greet(name: string): string {
+  return `Hello, ${name}!`;
+}
+const multiply = (a: number, b: number): number =&gt; a * b;</pre>
+        <table class="compare">
+          <tr><th>Type</th><th>Meaning</th><th>Good reminder</th></tr>
+          <tr><td><code>any</code></td><td>Opt out of type checking.</td><td>Avoid when possible.</td></tr>
+          <tr><td><code>unknown</code></td><td>Value not yet known.</td><td>Narrow or validate before use.</td></tr>
+          <tr><td><code>void</code></td><td>No useful return value.</td><td>Common for logging functions.</td></tr>
+          <tr><td><code>never</code></td><td>Function does not finish normally.</td><td>For throwing or endless functions.</td></tr>
+        </table>
+        <pre class="code">function show(value: unknown): string {
+  if (typeof value === "string") return value;
+  return String(value);
+}</pre>
+        <div class="tip"><strong>Remember:</strong> <code>unknown</code> is safer than <code>any</code> because it requires a check before use.</div>
+      </article>
+
+      <div class="diagram">
+        <svg viewBox="0 0 760 148" role="img" aria-label="Unknown input is checked, narrowed, then safely used">
+          <rect x="8" y="38" width="160" height="62" rx="14" fill="#e7def3"/>
+          <rect x="218" y="38" width="160" height="62" rx="14" fill="#fff0cf"/>
+          <rect x="428" y="38" width="160" height="62" rx="14" fill="#d9f0e9"/>
+          <rect x="638" y="38" width="112" height="62" rx="14" fill="#d8eaf5"/>
+          <path d="M168 69h50m160 0h50m160 0h50" stroke="#45677e" stroke-width="3"/>
+          <path d="m212 69-9-6v12z m210 0-9-6v12z m210 0-9-6v12z" fill="#45677e"/>
+          <text x="88" y="75" text-anchor="middle">unknown</text>
+          <text x="298" y="75" text-anchor="middle">check type</text>
+          <text x="508" y="75" text-anchor="middle">narrow</text>
+          <text x="694" y="75" text-anchor="middle">use</text>
+          <text x="298" y="123" text-anchor="middle" class="small">typeof value === "string"</text>
+        </svg>
+      </div>
+
+      <div class="remember-box">
+        <h3>Running and checking examples</h3>
+        <pre class="code">node .\01_Chapter_Js_basic\01_helloworld.js
+.\node_modules\.bin\tsc.cmd --ignoreConfig --noEmit --strict .\31_Chapter_TypeScript\214.ts</pre>
+        <p class="small-note">The first command runs a JavaScript file. The TypeScript command checks types only; it does not execute the program. Available TypeScript execution options depend on the Node.js version and project setup.</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
